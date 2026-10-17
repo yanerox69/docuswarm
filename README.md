@@ -6,19 +6,24 @@ Built for the [AMD Developer Hackathon: ACT III](https://lablab.ai/ai-hackathons
 
 ## Status
 
-The app, swarm orchestration, and dashboard are fully built and tested
-end-to-end (see Tests below). Both AMD Developer Cloud and Fireworks AI
-(which serves inference on AMD Instinct GPUs) require a verified payment
-method to issue GPU/inference credits, even when usage is fully covered by
-the hackathon's free credits — a barrier we couldn't clear in time for this
-submission. This is precisely why the backend was built provider-agnostic
-from the start: `backend/app/llm.py` talks to any OpenAI-compatible
-endpoint, so connecting it to a live AMD-backed model (self-hosted vLLM or
-Fireworks) is a two-line env var change with zero code changes, documented
-in [`deploy/AMD_DEPLOYMENT.md`](deploy/AMD_DEPLOYMENT.md). The demo below
-runs on the included deterministic mock provider so the full flow —
-concurrent processing, live throughput dashboard, export — is fully
-demoable today.
+Tested end-to-end on real AMD hardware: an **AMD Instinct MI300X** GPU
+Droplet on AMD Developer Cloud, serving **Qwen3-8B** through vLLM's ROCm
+build. On that instance DocuSwarm processed **6 documents concurrently in
+1.5 seconds at 1,653.9 tokens/sec** — real GPU throughput read from vLLM's
+`usage` field, not a simulation. Each result reflects genuine LLM judgment
+(for example, a contract flagged MEDIUM risk for termination penalties and
+liquidated damages), not keyword matching.
+
+The video presentation and slide deck were captured live from that
+instance. The droplet was powered off once the AMD Developer Cloud trial
+credit ran out, so the demo URL in the submission may no longer respond;
+the video is the record of the live run.
+
+To reproduce it on your own GPU, follow
+[`deploy/AMD_DEPLOYMENT.md`](deploy/AMD_DEPLOYMENT.md). The backend talks
+to any OpenAI-compatible endpoint, so it is an env var change, not a code
+change. Without a GPU, the included deterministic mock provider runs the
+full flow — concurrent processing, live dashboard, export.
 
 ## The problem
 
@@ -100,7 +105,7 @@ npm run dev
 ```
 
 Open http://localhost:3000, drop in a few `.txt`/`.pdf`/`.docx` files, and
-hit **Analizar**.
+hit **Analyze**.
 
 ## Running on real AMD GPUs
 
