@@ -26,7 +26,6 @@ does.
    ```bash
    git clone https://github.com/yanerox69/docuswarm-.git
    cd docuswarm-
-   git checkout claude/amd-hackathon-act-iii-5b0pcq
    ```
 
 ## 1. Confirm the GPU is visible
