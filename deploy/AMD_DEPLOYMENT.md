@@ -24,8 +24,8 @@ does.
    ```
 5. Clone this repo on the instance:
    ```bash
-   git clone https://github.com/yanerox69/docuswarm-.git
-   cd docuswarm-
+   git clone https://github.com/yanerox69/docuswarm.git
+   cd docuswarm
    ```
 
 ## 1. Confirm the GPU is visible
