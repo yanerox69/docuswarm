@@ -24,8 +24,8 @@ does.
    ```
 5. Clone this repo on the instance:
    ```bash
-   git clone https://github.com/yanerox69/yanerodata.git
-   cd yanerodata
+   git clone https://github.com/yanerox69/docuswarm-.git
+   cd docuswarm-
    git checkout claude/amd-hackathon-act-iii-5b0pcq
    ```
 
