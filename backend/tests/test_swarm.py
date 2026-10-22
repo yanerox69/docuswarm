@@ -26,3 +26,12 @@ async def test_swarm_processes_all_documents_concurrently():
     # metrics should show completion counting up to the full batch
     assert done_events[-1].metrics.completed == 3
     assert done_events[-1].metrics.total == 3
+
+
+@pytest.mark.asyncio
+async def test_mock_keeps_highest_risk_when_both_levels_match():
+    docs = [DocInput(id="doc-0", name="a.txt", text="Early exit triggers a penalty. Governing law: Delaware.")]
+
+    done = [e async for e in analyze_swarm(docs, concurrency=1) if e.status == "done"]
+
+    assert done[0].analysis.risk_level == "high"

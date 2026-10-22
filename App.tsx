@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import type { DocEntry, SwarmEvent, SwarmMetrics } from './types';
-import { runSwarm, exportUrl } from './services/swarmService';
+import { runSwarm, exportUrl, DEMO_MODE } from './services/swarmService';
+import { demoExportUrl, loadSampleFiles } from './services/demoSwarm';
 import { FileDropzone } from './components/FileDropzone';
 import { DocCard } from './components/DocCard';
 import { MetricsBar } from './components/MetricsBar';
@@ -35,6 +36,15 @@ export default function App(): React.ReactElement {
     if (event.metrics) setMetrics(event.metrics);
   }, []);
 
+  const handleLoadSamples = useCallback(async () => {
+    setError(null);
+    try {
+      setFiles(await loadSampleFiles());
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not load the sample contracts.');
+    }
+  }, []);
+
   const handleRun = useCallback(async () => {
     if (files.length === 0) return;
     setIsRunning(true);
@@ -58,6 +68,19 @@ export default function App(): React.ReactElement {
   const orderedDocs = useMemo(() => docOrder.map((id) => docs[id]).filter(Boolean), [docOrder, docs]);
   const doneCount = orderedDocs.filter((d) => d.status === 'done').length;
   const hasResults = doneCount > 0 && !isRunning;
+  const exportLinks = useMemo(
+    () =>
+      DEMO_MODE
+    ? [
+        { label: 'CSV', href: hasResults ? demoExportUrl(orderedDocs, 'csv') : '', file: 'due_diligence_report.csv' },
+        { label: 'JSON', href: hasResults ? demoExportUrl(orderedDocs, 'json') : '', file: 'due_diligence_report.json' },
+      ]
+    : [
+        { label: 'Excel', href: exportUrl('xlsx'), file: undefined },
+        { label: 'JSON', href: exportUrl('json'), file: undefined },
+      ],
+    [hasResults, orderedDocs]
+  );
 
   return (
     <div className="min-h-screen bg-gray-900 text-white font-sans">
@@ -77,8 +100,25 @@ export default function App(): React.ReactElement {
         </header>
 
         <div className="max-w-4xl mx-auto space-y-6">
+          {DEMO_MODE && (
+            <div className="bg-amber-900/30 border border-amber-700/60 text-amber-200 px-4 py-3 rounded-lg text-sm">
+              <strong className="font-bold">Demo mode.</strong> This public page has no backend and no GPU: the
+              swarm runs in your browser with the same simulated responses as the backend's mock provider
+              (keyword-based risk, 0.6–1.8 s per document). Real results on an AMD Instinct MI300X are in the{' '}
+              <a className="underline" href="https://github.com/yanerox69/docuswarm#performance">README</a>.
+            </div>
+          )}
           <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 md:p-6 space-y-4">
             <FileDropzone files={files} onChange={setFiles} disabled={isRunning} />
+            {DEMO_MODE && (
+              <button
+                onClick={handleLoadSamples}
+                disabled={isRunning}
+                className="text-sm text-sky-400 hover:text-sky-300 underline disabled:opacity-50"
+              >
+                Load 8 sample contracts
+              </button>
+            )}
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3 text-sm">
@@ -133,20 +173,21 @@ export default function App(): React.ReactElement {
               <h2 className="text-xl font-bold">Results ({orderedDocs.length})</h2>
               {hasResults && (
                 <div className="flex gap-2">
-                  <a
-                    href={exportUrl('xlsx')}
-                    className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-emerald-900 bg-emerald-400 hover:bg-emerald-500 transition-colors"
-                  >
-                    <DownloadIcon className="mr-2 h-4 w-4" />
-                    Excel
-                  </a>
-                  <a
-                    href={exportUrl('json')}
-                    className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-indigo-900 bg-indigo-400 hover:bg-indigo-500 transition-colors"
-                  >
-                    <DownloadIcon className="mr-2 h-4 w-4" />
-                    JSON
-                  </a>
+                  {exportLinks.map((link, i) => (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      download={link.file}
+                      className={`inline-flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                        i === 0
+                          ? 'text-emerald-900 bg-emerald-400 hover:bg-emerald-500'
+                          : 'text-indigo-900 bg-indigo-400 hover:bg-indigo-500'
+                      }`}
+                    >
+                      <DownloadIcon className="mr-2 h-4 w-4" />
+                      {link.label}
+                    </a>
+                  ))}
                 </div>
               )}
             </div>
@@ -160,7 +201,11 @@ export default function App(): React.ReactElement {
 
         {orderedDocs.length === 0 && !isRunning && (
           <div className="text-center py-16 text-gray-500">
-            <p>Upload documents and press "Analyze" to launch the swarm.</p>
+            <p>
+              {DEMO_MODE
+                ? 'Load the sample contracts (or drop your own .txt files) and press "Analyze" to launch the swarm.'
+                : 'Upload documents and press "Analyze" to launch the swarm.'}
+            </p>
           </div>
         )}
       </main>

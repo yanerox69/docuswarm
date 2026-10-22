@@ -1,0 +1,8 @@
+SOFTWARE LICENSE AGREEMENT (SAMPLE — FICTIONAL PARTIES)
+
+Licensor: Quartz Imaging Ltd. Licensee: Pinecrest Hospital Network. Effective August 1, 2026.
+
+1. License. Non-exclusive, non-transferable license to use the Quartz PACS viewer on up to 300 workstations.
+2. Fees. One-time license fee of USD 120,000 and annual support fees of USD 24,000.
+3. Support term. Support will auto-renew yearly unless cancelled sixty (60) days before renewal.
+4. Liability. Licensor's total liability is capped at the fees paid in the prior twelve months. Licensee shall indemnify Licensor for any use of the software outside its intended medical purpose.

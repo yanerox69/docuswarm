@@ -1,0 +1,9 @@
+TERM LOAN AGREEMENT (SAMPLE — FICTIONAL PARTIES)
+
+Lender: Granite Bay Capital Partners. Borrower: Solstice Solar Installers Inc. Closing date: May 5, 2026.
+
+1. Principal. USD 2,000,000, repayable in 36 monthly installments beginning June 5, 2026.
+2. Interest. 11.5% per annum, fixed.
+3. Prepayment. Any prepayment during the first 24 months is subject to a penalty of 4% of the amount prepaid.
+4. Events of default. Lender may terminate the commitment and accelerate all amounts if Borrower's cash balance falls below USD 250,000 at any month end.
+5. Guarantee. The founders personally indemnify Lender for all losses under this Agreement.

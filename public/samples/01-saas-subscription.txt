@@ -1,0 +1,8 @@
+SAAS SUBSCRIPTION AGREEMENT (SAMPLE — FICTIONAL PARTIES)
+
+This Agreement is entered into on March 1, 2026 between Northwind Analytics Ltd. ("Provider") and Harbor Logistics S.A. ("Customer").
+
+1. Term. The initial term is twelve (12) months. This Agreement will auto-renew for successive twelve-month periods unless either party gives written notice at least ninety (90) days before the end of the then-current term.
+2. Fees. Customer shall pay USD 48,000 per year, invoiced annually in advance.
+3. Termination. Provider may terminate immediately if Customer fails to pay within fifteen (15) days of the due date. Early termination by Customer triggers a penalty equal to the fees remaining in the current term.
+4. Governing law. This Agreement is governed by the laws of the State of Delaware.

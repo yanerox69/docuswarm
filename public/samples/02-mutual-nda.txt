@@ -1,0 +1,8 @@
+MUTUAL NON-DISCLOSURE AGREEMENT (SAMPLE — FICTIONAL PARTIES)
+
+Effective date: January 15, 2026. Parties: Bluefin Robotics Inc. and Oakridge Medical Devices LLC.
+
+1. Purpose. The parties wish to evaluate a possible joint development of a surgical robotics component.
+2. Confidential information. Each party shall keep the other party's confidential information secret and use it only for the Purpose.
+3. Duration. Obligations survive for three (3) years after the effective date.
+4. Disputes. Any dispute shall be resolved by binding arbitration in New York, NY.

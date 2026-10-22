@@ -150,7 +150,9 @@ async def _mock_achat(messages: List[Dict[str, str]]) -> Tuple[str, Dict[str, An
     for level, words in _RISK_WORDS.items():
         for w in words:
             if w in lowered:
-                risk = level
+                # _RISK_WORDS lists "high" first, so only upgrade from "low".
+                if risk == "low":
+                    risk = level
                 flags.append(f"Contains '{w}' language")
     if not flags:
         flags = ["No obvious red flags detected in mock analysis."]

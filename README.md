@@ -4,6 +4,8 @@
 
 Built for the [AMD Developer Hackathon: ACT III](https://lablab.ai/ai-hackathons/amd-developer-hackathon-act-iii) — *"AI agents and high-performance AI applications on AMD GPUs in the cloud."*
 
+**Live demo (no GPU, runs in your browser):** https://yanerox69.github.io/docuswarm/
+
 ## Status
 
 Tested end-to-end on real AMD hardware: an **AMD Instinct MI300X** GPU
@@ -112,6 +114,40 @@ hit **Analyze**.
 See [`deploy/AMD_DEPLOYMENT.md`](deploy/AMD_DEPLOYMENT.md) for the full
 walkthrough: serving a model with vLLM's ROCm build, pointing the backend
 at it, and running the full stack with `docker compose`.
+
+## Performance
+
+**Measured on AMD hardware.** On an AMD Instinct MI300X (AMD Developer Cloud)
+serving Qwen3-8B through vLLM's ROCm build, DocuSwarm processed 6 documents
+concurrently in 1.5 seconds at 1,653.9 tokens/sec. That run is the one shown
+in the video. The instance was shut down when the trial credit ran out, so a
+full concurrency sweep on the GPU is still pending.
+
+**Concurrency sweep, mock provider.** `backend/bench.py` runs the same batch
+at 1x, 2x, 4x and 8x concurrency and prints the table below. With the mock
+provider each document takes a simulated 0.6–1.8 s, so this measures the
+swarm orchestration only, not GPU throughput: it shows that wall time falls
+as documents are dispatched in parallel instead of queuing.
+
+16 documents (the 8 samples in `public/samples/`, twice), `python bench.py --repeat 2`:
+
+| Concurrency | Wall time | Speed-up vs 1x | Tokens/sec | Avg latency per doc |
+|---|---|---|---|---|
+| 1x | 20.04 s | 1.00x | 199.9 | 1.25 s |
+| 2x | 11.83 s | 1.69x | 338.7 | 1.43 s |
+| 4x | 5.25 s | 3.82x | 763.6 | 1.19 s |
+| 8x | 3.32 s | 6.03x | 1205.7 | 1.29 s |
+
+**Reproduce it on a GPU.** Point the same script at a vLLM server:
+
+```bash
+cd backend
+LLM_PROVIDER=vllm LLM_BASE_URL=http://<host>:8000/v1 LLM_MODEL=Qwen/Qwen3-8B python bench.py --repeat 2
+```
+
+On a real server the per-document latency is expected to stay roughly flat as
+concurrency rises while tokens/sec climbs, because vLLM batches the concurrent
+requests on the GPU.
 
 ## Tech stack
 

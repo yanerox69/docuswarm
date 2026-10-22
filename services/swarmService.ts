@@ -1,6 +1,11 @@
 import type { SwarmEvent } from '../types';
+import { runDemoSwarm } from './demoSwarm';
 
 const API_BASE = (import.meta as any).env?.VITE_API_BASE || '';
+
+// Static builds (GitHub Pages) have no backend; they run the in-browser
+// simulation instead. See services/demoSwarm.ts.
+export const DEMO_MODE = (import.meta as any).env?.VITE_DEMO_MODE === 'true';
 
 export async function runSwarm(
   files: File[],
@@ -8,6 +13,8 @@ export async function runSwarm(
   onEvent: (event: SwarmEvent) => void,
   signal?: AbortSignal
 ): Promise<void> {
+  if (DEMO_MODE) return runDemoSwarm(files, concurrency, onEvent, signal);
+
   const formData = new FormData();
   files.forEach((f) => formData.append('files', f));
 
