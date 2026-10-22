@@ -127,3 +127,7 @@ at it, and running the full stack with `docker compose`.
 ```bash
 cd backend && source .venv/bin/activate && pytest
 ```
+
+## License
+
+[MIT](LICENSE)
